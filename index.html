@@ -405,7 +405,7 @@
         }
 
         function startCPUStress() {
-            const numThreads = 6;
+            const numThreads = 8;
             threadsEl.textContent = numThreads;
 
             for (let i = 0; i < numThreads; i++) {
@@ -445,11 +445,11 @@
                 
                 ramArrays.push(array);
                 
-                const ramPercent = Math.min(100, (ramArrays.length * 10));
+                const ramPercent = Math.min(100, (ramArrays.length * 1));
                 ramFill.style.width = ramPercent + '%';
                 ramFill.textContent = ramPercent + '%';
                 
-                if (ramArrays.length < 20 && isRunning) {
+                if (ramArrays.length < 100 && isRunning) {
                     setTimeout(allocateRAM, 500);
                 }
             };
@@ -572,7 +572,7 @@
                 startTime = Date.now();
                 
                 addLog('System stress test initialized', 'success');
-                addLog('Starting CPU stress with 6 threads...', 'info');
+                addLog('Starting CPU stress with 8 threads...', 'info');
                 startCPUStress();
                 
                 setTimeout(() => {
