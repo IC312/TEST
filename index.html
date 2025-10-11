@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Stress Test</title>
+    <title>💀 ULTIMATE SYSTEM DESTROYER 💀</title>
     <style>
         * {
             margin: 0;
@@ -13,30 +13,61 @@
 
         body {
             font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #8B0000 0%, #FF0000 50%, #8B0000 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { background: linear-gradient(135deg, #8B0000 0%, #FF0000 50%, #8B0000 100%); }
+            50% { background: linear-gradient(135deg, #FF0000 0%, #8B0000 50%, #FF0000 100%); }
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(255, 0, 0, 0.5);
             max-width: 900px;
             width: 100%;
+            border: 3px solid #FF0000;
         }
 
         h1 {
-            color: #fff;
+            color: #FF0000;
             text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px #FF0000, 0 0 20px #FF0000;
+            animation: glow 1s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px #FF0000, 0 0 20px #FF0000; }
+            50% { text-shadow: 0 0 20px #FF0000, 0 0 40px #FF0000, 0 0 60px #FF0000; }
+        }
+
+        .warning {
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #FF0000;
+            border-radius: 10px;
+            padding: 20px;
             margin-bottom: 30px;
-            font-size: 2em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: #FFD700;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
         }
 
         .start-section {
@@ -44,31 +75,34 @@
         }
 
         #startBtn {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a6f);
+            background: linear-gradient(45deg, #8B0000, #FF0000, #8B0000);
             color: white;
-            border: none;
-            padding: 20px 60px;
-            font-size: 1.5em;
+            border: 3px solid #FF0000;
+            padding: 25px 80px;
+            font-size: 2em;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(238, 90, 111, 0.4);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
             font-weight: bold;
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
 
         #startBtn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(238, 90, 111, 0.6);
-        }
-
-        #startBtn:active {
-            transform: translateY(0);
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(255, 0, 0, 1);
         }
 
         #startBtn:disabled {
-            background: #666;
+            background: #333;
             cursor: not-allowed;
-            transform: none;
+            animation: none;
         }
 
         .status {
@@ -77,19 +111,20 @@
         }
 
         .status-text {
-            color: #fff;
-            font-size: 1.3em;
+            color: #FF0000;
+            font-size: 1.5em;
             margin-bottom: 15px;
+            font-weight: bold;
         }
 
         .loader {
             display: none;
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-top: 5px solid #fff;
+            width: 80px;
+            height: 80px;
+            border: 8px solid rgba(255, 0, 0, 0.3);
+            border-top: 8px solid #FF0000;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.5s linear infinite;
             margin: 0 auto;
         }
 
@@ -103,15 +138,16 @@
         }
 
         .resource-section {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(255, 0, 0, 0.1);
             border-radius: 10px;
             padding: 15px;
             margin: 15px 0;
+            border: 2px solid rgba(255, 0, 0, 0.3);
         }
 
         .resource-label {
-            color: #fff;
-            font-size: 1.1em;
+            color: #FF0000;
+            font-size: 1.2em;
             font-weight: bold;
             margin-bottom: 10px;
             display: flex;
@@ -120,55 +156,66 @@
         }
 
         .resource-icon {
-            font-size: 1.3em;
+            font-size: 1.5em;
         }
 
         .resource-bar {
-            background: rgba(255, 255, 255, 0.2);
-            height: 30px;
-            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            height: 40px;
+            border-radius: 20px;
             overflow: hidden;
             margin: 10px 0;
+            border: 2px solid rgba(255, 0, 0, 0.5);
         }
 
         .resource-fill {
             height: 100%;
             width: 0%;
-            transition: width 0.3s;
+            transition: width 0.1s;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
+            font-size: 1.1em;
         }
 
         .cpu-fill {
-            background: linear-gradient(90deg, #4ade80, #22c55e, #16a34a);
+            background: linear-gradient(90deg, #FF0000, #8B0000, #FF0000);
+            animation: fillPulse 0.5s infinite;
         }
 
         .ram-fill {
-            background: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+            background: linear-gradient(90deg, #FF6B00, #FF0000, #FF6B00);
+            animation: fillPulse 0.5s infinite;
         }
 
         .gpu-fill {
-            background: linear-gradient(90deg, #f59e0b, #f97316, #ea580c);
+            background: linear-gradient(90deg, #FFD700, #FF4500, #FFD700);
+            animation: fillPulse 0.5s infinite;
+        }
+
+        @keyframes fillPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
 
         .log-container {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.9);
             border-radius: 10px;
             padding: 20px;
-            height: 300px;
+            height: 350px;
             overflow-y: auto;
             display: none;
             margin-top: 20px;
+            border: 2px solid #FF0000;
         }
 
         .log-entry {
             color: #0f0;
             font-size: 0.9em;
             margin: 5px 0;
-            animation: fadeIn 0.3s;
+            animation: fadeIn 0.2s;
         }
 
         .log-entry.warning {
@@ -176,7 +223,8 @@
         }
 
         .log-entry.error {
-            color: #ef4444;
+            color: #FF0000;
+            font-weight: bold;
         }
 
         .log-entry.info {
@@ -185,6 +233,13 @@
 
         .log-entry.success {
             color: #4ade80;
+        }
+
+        .log-entry.critical {
+            color: #FF0000;
+            font-weight: bold;
+            text-shadow: 0 0 5px #FF0000;
+            animation: blink 0.5s infinite;
         }
 
         @keyframes fadeIn {
@@ -206,10 +261,11 @@
         }
 
         .stat-box {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 0, 0, 0.2);
             padding: 15px;
             border-radius: 10px;
             text-align: center;
+            border: 2px solid rgba(255, 0, 0, 0.5);
         }
 
         .stat-label {
@@ -219,21 +275,22 @@
         }
 
         .stat-value {
-            color: #fff;
-            font-size: 1.5em;
+            color: #FF0000;
+            font-size: 1.8em;
             font-weight: bold;
+            text-shadow: 0 0 10px #FF0000;
         }
 
         #stopBtn {
-            background: linear-gradient(45deg, #ef4444, #dc2626);
+            background: linear-gradient(45deg, #000000, #333333);
             color: white;
-            border: none;
+            border: 3px solid #FF0000;
             padding: 15px 40px;
-            font-size: 1.2em;
+            font-size: 1.3em;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.6);
             font-weight: bold;
             display: none;
             margin: 20px auto;
@@ -241,7 +298,7 @@
 
         #stopBtn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.8);
         }
 
         #gpuCanvas {
@@ -256,12 +313,12 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 0, 0, 0.5);
             border-radius: 10px;
         }
     </style>
@@ -269,10 +326,16 @@
 <body>
     <canvas id="gpuCanvas"></canvas>
     <div class="container">
-        <h1>⚡ SYSTEM STRESS TEST ⚡</h1>
+        <h1>💀 ULTIMATE SYSTEM DESTROYER 💀</h1>
+        
+        <div class="warning">
+            ⚠️ CẢNH BÁO: CHƯƠNG TRÌNH NÀY SẼ TẢI HỆ THỐNG CỦA BẠN LÊN MỨC TỐI ĐA! ⚠️<br>
+            CÓ THỂ GÂY CRASH, BLUE SCREEN, HOẶC ĐÓNG BĂNG HỆ THỐNG!<br>
+            NHIỆT ĐỘ CPU/GPU SẼ TĂNG MẠNH!
+        </div>
         
         <div class="start-section">
-            <button id="startBtn">BẮT ĐẦU</button>
+            <button id="startBtn">🔥 BẮT ĐẦU HỦY DIỆT 🔥</button>
         </div>
 
         <div class="status">
@@ -283,7 +346,7 @@
         <div class="system-info" id="systemInfo">
             <div class="resource-section">
                 <div class="resource-label">
-                    <span class="resource-icon">🔥</span> CPU Usage
+                    <span class="resource-icon">🔥</span> CPU OVERLOAD
                 </div>
                 <div class="resource-bar">
                     <div class="resource-fill cpu-fill" id="cpuFill">0%</div>
@@ -292,7 +355,7 @@
 
             <div class="resource-section">
                 <div class="resource-label">
-                    <span class="resource-icon">💾</span> RAM Usage
+                    <span class="resource-icon">💾</span> RAM DESTRUCTION
                 </div>
                 <div class="resource-bar">
                     <div class="resource-fill ram-fill" id="ramFill">0%</div>
@@ -301,7 +364,7 @@
 
             <div class="resource-section">
                 <div class="resource-label">
-                    <span class="resource-icon">🎮</span> GPU Usage
+                    <span class="resource-icon">🎮</span> GPU ANNIHILATION
                 </div>
                 <div class="resource-bar">
                     <div class="resource-fill gpu-fill" id="gpuFill">0%</div>
@@ -311,24 +374,24 @@
 
         <div class="stats" id="stats">
             <div class="stat-box">
-                <div class="stat-label">Threads</div>
+                <div class="stat-label">THREADS</div>
                 <div class="stat-value" id="threads">0</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label">RAM Allocated</div>
+                <div class="stat-label">RAM USED</div>
                 <div class="stat-value" id="ramAllocated">0 MB</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label">GPU Frames</div>
+                <div class="stat-label">GPU FRAMES</div>
                 <div class="stat-value" id="gpuFrames">0</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label">Time</div>
+                <div class="stat-label">TIME</div>
                 <div class="stat-value" id="time">0s</div>
             </div>
         </div>
 
-        <button id="stopBtn">DỪNG LẠI</button>
+        <button id="stopBtn">⛔ DỪNG KHẨN CẤP ⛔</button>
 
         <div class="log-container" id="logContainer"></div>
     </div>
@@ -342,6 +405,7 @@
         let gpuFrameCount = 0;
         let logInterval;
         let statsInterval;
+        let extraCanvases = [];
 
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
@@ -361,28 +425,24 @@
         const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
 
         const logMessages = [
-            { type: 'info', msg: 'Initializing system stress test...' },
-            { type: 'success', msg: 'CPU threads spawned successfully' },
-            { type: 'info', msg: 'Allocating RAM buffers...' },
-            { type: 'warning', msg: 'High CPU usage detected!' },
-            { type: 'info', msg: 'Running prime number calculations...' },
-            { type: 'info', msg: 'Executing matrix operations...' },
-            { type: 'warning', msg: 'Temperature rising...' },
-            { type: 'success', msg: 'RAM allocation complete' },
-            { type: 'info', msg: 'GPU rendering pipeline active' },
-            { type: 'info', msg: 'Processing cryptographic hashing...' },
-            { type: 'info', msg: 'Computing Fibonacci sequences...' },
-            { type: 'warning', msg: 'System load increasing...' },
-            { type: 'info', msg: 'Running floating-point operations...' },
-            { type: 'success', msg: 'GPU shader compilation complete' },
-            { type: 'info', msg: 'Executing parallel computations...' },
-            { type: 'error', msg: 'WARNING: Maximum load reached!' },
-            { type: 'info', msg: 'Processing data streams...' },
-            { type: 'info', msg: 'Memory pressure increasing...' },
-            { type: 'warning', msg: 'RAM usage at critical level!' },
-            { type: 'info', msg: 'GPU rendering complex scenes...' },
-            { type: 'success', msg: 'All systems operational' },
-            { type: 'warning', msg: 'Resource usage at 100%!' }
+            { type: 'critical', msg: '💀 SYSTEM OVERLOAD IMMINENT!' },
+            { type: 'error', msg: '🔥 CPU TEMPERATURE CRITICAL!' },
+            { type: 'critical', msg: '⚠️ MEMORY PRESSURE EXTREME!' },
+            { type: 'error', msg: '💥 GPU THERMAL THROTTLING!' },
+            { type: 'warning', msg: '🌡️ All cores running at 100%!' },
+            { type: 'critical', msg: '☢️ NUCLEAR LEVEL STRESS DETECTED!' },
+            { type: 'error', msg: '🔥 System resources exhausted!' },
+            { type: 'warning', msg: '💾 RAM allocation aggressive!' },
+            { type: 'critical', msg: '⚡ POWER CONSUMPTION MAXIMUM!' },
+            { type: 'error', msg: '🎮 GPU frame buffer overflow!' },
+            { type: 'warning', msg: '🌀 Thread scheduler overloaded!' },
+            { type: 'critical', msg: '💀 DANGER: SYSTEM INSTABILITY!' },
+            { type: 'error', msg: '🔥 Thermal protection may engage!' },
+            { type: 'info', msg: '📊 All performance counters maxed!' },
+            { type: 'critical', msg: '☠️ MAXIMUM DESTRUCTION ACHIEVED!' },
+            { type: 'warning', msg: '⚠️ Fan speed at maximum!' },
+            { type: 'error', msg: '💥 Cache thrashing detected!' },
+            { type: 'critical', msg: '🚨 EMERGENCY: SYSTEM AT LIMIT!' }
         ];
 
         function addLog(message, type = 'info') {
@@ -392,20 +452,24 @@
             logEntry.textContent = `[${timestamp}] ${message}`;
             logContainer.appendChild(logEntry);
             logContainer.scrollTop = logContainer.scrollHeight;
+            
+            if (logContainer.children.length > 100) {
+                logContainer.removeChild(logContainer.children[0]);
+            }
         }
 
         function updateStats() {
             const elapsed = Math.floor((Date.now() - startTime) / 1000);
             timeEl.textContent = elapsed + 's';
             
-            const ramUsed = (ramArrays.length * 50);
+            const ramUsed = (ramArrays.length * 100);
             ramAllocatedEl.textContent = ramUsed + ' MB';
             
             gpuFramesEl.textContent = gpuFrameCount.toLocaleString();
         }
 
         function startCPUStress() {
-            const numThreads = 64;
+            const numThreads = 128;
             threadsEl.textContent = numThreads;
 
             for (let i = 0; i < numThreads; i++) {
@@ -414,15 +478,23 @@
                         if (e.data === 'start') {
                             while (true) {
                                 let result = 0;
-                                for (let i = 0; i < 5000000; i++) {
+                                for (let i = 0; i < 10000000; i++) {
                                     result += Math.sqrt(i) * Math.sin(i) * Math.cos(i);
-                                    result += Math.pow(i, 2) / (i + 1);
+                                    result += Math.pow(i, 3) / (i + 1);
                                     result += Math.tan(i) * Math.log(i + 1);
                                     result += Math.exp(i % 10) / (i + 1);
                                     result += Math.atan2(i, i + 1) * Math.sinh(i % 5);
                                     result += Math.cosh(i % 7) * Math.tanh(i % 3);
-                                    result += Math.asin(Math.sin(i)) * Math.acos(Math.cos(i));
+                                    result += Math.asin(Math.sin(i % 100) / 100) * Math.acos(Math.cos(i % 100) / 100);
                                     result += Math.cbrt(i) * Math.hypot(i, i + 1);
+                                    result += Math.ceil(i / 3) * Math.floor(i / 5);
+                                    result += Math.abs(Math.sin(i)) * Math.sign(Math.cos(i));
+                                    
+                                    let temp = result;
+                                    for (let j = 0; j < 5; j++) {
+                                        temp = Math.sqrt(Math.abs(temp)) + Math.sin(temp);
+                                    }
+                                    result += temp;
                                 }
                                 self.postMessage(result);
                             }
@@ -441,21 +513,25 @@
             const allocateRAM = () => {
                 if (!isRunning) return;
                 
-                const size = 100 * 1024 * 1024;
+                const size = 150 * 1024 * 1024;
                 const array = new Uint8Array(size);
                 
-                for (let i = 0; i < array.length; i += 500) {
+                for (let i = 0; i < array.length; i += 100) {
                     array[i] = Math.floor(Math.random() * 256);
+                }
+                
+                for (let i = 0; i < array.length; i += 200) {
+                    array[i] = array[i] ^ 0xFF;
                 }
                 
                 ramArrays.push(array);
                 
-                const ramPercent = Math.min(100, (ramArrays.length * 2));
+                const ramPercent = Math.min(100, (ramArrays.length * 3));
                 ramFill.style.width = ramPercent + '%';
                 ramFill.textContent = ramPercent + '%';
                 
-                if (ramArrays.length < 50 && isRunning) {
-                    setTimeout(allocateRAM, 100);
+                if (ramArrays.length < 34 && isRunning) {
+                    setTimeout(allocateRAM, 50);
                 }
             };
             
@@ -468,8 +544,18 @@
                 return;
             }
 
-            canvas.width = 3840;
-            canvas.height = 2160;
+            canvas.width = 7680;
+            canvas.height = 4320;
+
+            for (let i = 0; i < 3; i++) {
+                const extraCanvas = document.createElement('canvas');
+                extraCanvas.width = 3840;
+                extraCanvas.height = 2160;
+                const extraGl = extraCanvas.getContext('webgl') || extraCanvas.getContext('experimental-webgl');
+                if (extraGl) {
+                    extraCanvases.push({canvas: extraCanvas, gl: extraGl});
+                }
+            }
 
             const vertexShaderSource = `
                 attribute vec2 position;
@@ -485,111 +571,132 @@
                 uniform float time;
                 varying vec2 vUv;
                 
+                float hash(vec2 p) {
+                    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+                }
+                
                 float noise(vec2 p) {
-                    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+                    vec2 i = floor(p);
+                    vec2 f = fract(p);
+                    f = f * f * (3.0 - 2.0 * f);
+                    return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+                               mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
                 }
                 
                 float fbm(vec2 p) {
                     float value = 0.0;
                     float amplitude = 0.5;
-                    for(int i = 0; i < 12; i++) {
+                    for(int i = 0; i < 16; i++) {
                         value += amplitude * noise(p);
-                        p *= 2.0;
+                        p *= 2.5;
                         amplitude *= 0.5;
                     }
                     return value;
                 }
                 
-                float pattern(vec2 p) {
+                float pattern(vec2 p, float t) {
                     float result = 0.0;
-                    for(int i = 0; i < 10; i++) {
+                    for(int i = 0; i < 15; i++) {
                         float fi = float(i);
-                        result += fbm(p * (fi + 1.0) + time * (fi * 0.1));
+                        result += fbm(p * (fi + 1.0) + t * (fi * 0.1));
+                        result += sin(fbm(p * fi + t) * 10.0) * 0.5;
                     }
                     return result;
                 }
                 
                 void main() {
-                    vec2 uv = vUv * 30.0;
+                    vec2 uv = vUv * 50.0;
                     
-                    float n1 = pattern(uv + time * 0.5);
-                    float n2 = pattern(uv * 2.0 - time * 0.3);
-                    float n3 = pattern(uv * 3.0 + time * 0.7);
+                    float n1 = pattern(uv + time * 0.5, time);
+                    float n2 = pattern(uv * 2.0 - time * 0.3, time * 1.5);
+                    float n3 = pattern(uv * 3.0 + time * 0.7, time * 2.0);
+                    float n4 = pattern(uv * 4.0 + time * 0.9, time * 2.5);
                     
-                    float r = sin(n1 * 15.0 + time) * 0.5 + 0.5;
-                    float g = sin(n2 * 15.0 + time * 1.5) * 0.5 + 0.5;
-                    float b = sin(n3 * 15.0 + time * 2.0) * 0.5 + 0.5;
+                    float r = sin(n1 * 20.0 + time) * 0.5 + 0.5;
+                    float g = sin(n2 * 20.0 + time * 1.5) * 0.5 + 0.5;
+                    float b = sin(n3 * 20.0 + time * 2.0) * 0.5 + 0.5;
                     
-                    for(int i = 0; i < 10; i++) {
+                    for(int i = 0; i < 15; i++) {
                         float fi = float(i);
-                        r += sin(uv.x * (fi + 1.0) + time * (fi + 1.0)) * 0.05;
-                        g += cos(uv.y * (fi + 1.0) + time * (fi + 1.5)) * 0.05;
-                        b += sin((uv.x + uv.y) * (fi + 1.0) + time * (fi + 2.0)) * 0.05;
+                        r += sin(uv.x * (fi + 1.0) + time * (fi + 1.0) + n4) * 0.03;
+                        g += cos(uv.y * (fi + 1.0) + time * (fi + 1.5) + n4) * 0.03;
+                        b += sin((uv.x + uv.y) * (fi + 1.0) + time * (fi + 2.0) + n4) * 0.03;
                     }
                     
-                    r = pow(r, 2.0);
-                    g = pow(g, 2.0);
-                    b = pow(b, 2.0);
+                    r = pow(r, 2.2);
+                    g = pow(g, 2.2);
+                    b = pow(b, 2.2);
                     
-                    gl_FragColor = vec4(r, g, b, 1.0);
+                    vec3 color = vec3(r, g, b);
+                    color = mix(color, vec3(1.0), fbm(uv + time) * 0.2);
+                    
+                    gl_FragColor = vec4(color, 1.0);
                 }
             `;
 
-            function createShader(type, source) {
-                const shader = gl.createShader(type);
-                gl.shaderSource(shader, source);
-                gl.compileShader(shader);
-                return shader;
+            function setupContext(context) {
+                function createShader(type, source) {
+                    const shader = context.createShader(type);
+                    context.shaderSource(shader, source);
+                    context.compileShader(shader);
+                    return shader;
+                }
+
+                const vertexShader = createShader(context.VERTEX_SHADER, vertexShaderSource);
+                const fragmentShader = createShader(context.FRAGMENT_SHADER, fragmentShaderSource);
+
+                const program = context.createProgram();
+                context.attachShader(program, vertexShader);
+                context.attachShader(program, fragmentShader);
+                context.linkProgram(program);
+                context.useProgram(program);
+
+                const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+                const buffer = context.createBuffer();
+                context.bindBuffer(context.ARRAY_BUFFER, buffer);
+                context.bufferData(context.ARRAY_BUFFER, vertices, context.STATIC_DRAW);
+
+                const position = context.getAttribLocation(program, 'position');
+                context.enableVertexAttribArray(position);
+                context.vertexAttribPointer(position, 2, context.FLOAT, false, 0, 0);
+
+                return context.getUniformLocation(program, 'time');
             }
 
-            const vertexShader = createShader(gl.VERTEX_SHADER, vertexShaderSource);
-            const fragmentShader = createShader(gl.FRAGMENT_SHADER, fragmentShaderSource);
-
-            const program = gl.createProgram();
-            gl.attachShader(program, vertexShader);
-            gl.attachShader(program, fragmentShader);
-            gl.linkProgram(program);
-            gl.useProgram(program);
-
-            const vertices = new Float32Array([
-                -1, -1,
-                1, -1,
-                -1, 1,
-                1, 1
-            ]);
-
-            const buffer = gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-            gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
-            const position = gl.getAttribLocation(program, 'position');
-            gl.enableVertexAttribArray(position);
-            gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-
-            const timeLocation = gl.getUniformLocation(program, 'time');
+            const timeLocation = setupContext(gl);
+            const extraTimeLocations = extraCanvases.map(({gl}) => setupContext(gl));
 
             let gpuPercent = 0;
             const gpuPercentInterval = setInterval(() => {
                 if (gpuPercent < 100) {
-                    gpuPercent += 25;
+                    gpuPercent += 33;
                     if (gpuPercent > 100) gpuPercent = 100;
                     gpuFill.style.width = gpuPercent + '%';
                     gpuFill.textContent = gpuPercent + '%';
                 } else {
                     clearInterval(gpuPercentInterval);
                 }
-            }, 50);
+            }, 30);
 
             function render() {
                 if (!isRunning) return;
 
-                for (let i = 0; i < 5; i++) {
-                    gl.uniform1f(timeLocation, performance.now() / 1000 + i * 0.1);
+                const time = performance.now() / 1000;
+
+                for (let i = 0; i < 20; i++) {
+                    gl.uniform1f(timeLocation, time + i * 0.02);
                     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
                     gl.finish();
                 }
+
+                extraCanvases.forEach(({gl}, idx) => {
+                    for (let i = 0; i < 10; i++) {
+                        gl.uniform1f(extraTimeLocations[idx], time + i * 0.02);
+                        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+                    }
+                });
                 
-                gpuFrameCount += 5;
+                gpuFrameCount += 50;
 
                 gpuAnimationId = requestAnimationFrame(render);
             }
@@ -602,11 +709,11 @@
             
             isRunning = true;
             startBtn.disabled = true;
-            statusText.textContent = 'Đang khởi động hệ thống...';
+            statusText.textContent = '💀 ĐANG KHỞI ĐỘNG HỦY DIỆT HỆ THỐNG...';
             loader.style.display = 'block';
             
             setTimeout(() => {
-                statusText.textContent = 'Stress Test đang chạy toàn bộ hệ thống!';
+                statusText.textContent = '🔥 HỆ THỐNG ĐANG BỊ THÁNH KHẢI ĐẾ CÔNG!!! 🔥';
                 systemInfo.style.display = 'block';
                 stats.style.display = 'grid';
                 logContainer.style.display = 'block';
@@ -615,39 +722,39 @@
                 let cpuUsage = 0;
                 const cpuInterval = setInterval(() => {
                     if (cpuUsage < 100) {
-                        cpuUsage += 25;
+                        cpuUsage += 50;
                         if (cpuUsage > 100) cpuUsage = 100;
                         cpuFill.style.width = cpuUsage + '%';
                         cpuFill.textContent = cpuUsage + '%';
                     } else {
                         clearInterval(cpuInterval);
                     }
-                }, 50);
+                }, 25);
                 
                 startTime = Date.now();
                 
-                addLog('System stress test initialized', 'success');
-                addLog('Starting CPU stress with 32 threads...', 'info');
+                addLog('💀 ULTIMATE SYSTEM DESTROYER ACTIVATED!', 'critical');
+                addLog('🔥 Deploying 128 CPU annihilation threads...', 'error');
                 startCPUStress();
                 
                 setTimeout(() => {
-                    addLog('Initiating RAM allocation...', 'info');
+                    addLog('💾 Initiating aggressive RAM destruction...', 'critical');
                     startRAMStress();
-                }, 300);
+                }, 100);
                 
                 setTimeout(() => {
-                    addLog('Starting GPU stress test...', 'info');
+                    addLog('🎮 Launching GPU thermal meltdown protocol...', 'error');
                     startGPUStress();
-                }, 400);
+                }, 150);
                 
                 logInterval = setInterval(() => {
                     const randomLog = logMessages[Math.floor(Math.random() * logMessages.length)];
                     addLog(randomLog.msg, randomLog.type);
-                }, 700);
+                }, 300);
                 
-                statsInterval = setInterval(updateStats, 1000);
+                statsInterval = setInterval(updateStats, 500);
                 
-            }, 1500);
+            }, 1000);
         });
 
         stopBtn.addEventListener('click', function() {
@@ -662,16 +769,19 @@
                 cancelAnimationFrame(gpuAnimationId);
             }
             
+            extraCanvases = [];
+            
             clearInterval(logInterval);
             clearInterval(statsInterval);
             
-            statusText.textContent = 'Đã dừng!';
+            statusText.textContent = '⛔ HỆ THỐNG ĐÃ DỪNG KHẨN CẤP!';
             loader.style.display = 'none';
-            addLog('Stress test stopped by user', 'warning');
-            addLog('Terminating all CPU threads...', 'info');
-            addLog('Releasing RAM allocations...', 'info');
-            addLog('Stopping GPU rendering...', 'info');
-            addLog('All resources cleaned up successfully', 'success');
+            addLog('⛔ Emergency shutdown initiated by user', 'warning');
+            addLog('🔧 Terminating all 128 CPU threads...', 'info');
+            addLog('💾 Releasing 5GB+ RAM allocations...', 'info');
+            addLog('🎮 Stopping GPU rendering pipelines...', 'info');
+            addLog('✅ All resources cleaned up successfully', 'success');
+            addLog('🌡️ System cooling down...', 'info');
             
             setTimeout(() => {
                 startBtn.disabled = false;
