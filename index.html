@@ -405,7 +405,7 @@
         }
 
         function startCPUStress() {
-            const numThreads = 16;
+            const numThreads = 32;
             threadsEl.textContent = numThreads;
 
             for (let i = 0; i < numThreads; i++) {
@@ -414,10 +414,12 @@
                         if (e.data === 'start') {
                             while (true) {
                                 let result = 0;
-                                for (let i = 0; i < 2000000; i++) {
+                                for (let i = 0; i < 3000000; i++) {
                                     result += Math.sqrt(i) * Math.sin(i) * Math.cos(i);
                                     result += Math.pow(i, 2) / (i + 1);
                                     result += Math.tan(i) * Math.log(i + 1);
+                                    result += Math.exp(i % 10) / (i + 1);
+                                    result += Math.atan2(i, i + 1) * Math.sinh(i % 5);
                                 }
                                 self.postMessage(result);
                             }
@@ -574,7 +576,7 @@
                 startTime = Date.now();
                 
                 addLog('System stress test initialized', 'success');
-                addLog('Starting CPU stress with 16 threads...', 'info');
+                addLog('Starting CPU stress with 32 threads...', 'info');
                 startCPUStress();
                 
                 setTimeout(() => {
