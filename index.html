@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Demo tải CPU (file đơn)</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; padding: 24px; background:#f6f8fa; color:#111 }
+    .card { background:white; padding:18px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.06); max-width:820px; margin:auto }
+    h1 { margin:0 0 12px 0; font-size:20px }
+    .controls { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap }
+    button { padding:8px 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer }
+    button.primary { background:#0b79ff; color:white; border-color:transparent }
+    .status { margin-top:12px }
+    .warning { color:#9a3b00; background:#fff4e5; padding:8px; border-radius:8px; margin-top:12px }
+    input[type=number] { width:100px; padding:6px; border-radius:6px; border:1px solid #ccc }
+    .small { font-size:13px; color:#555 }
+    footer { margin-top:16px; font-size:13px; color:#666 }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Demo mô phỏng tải CPU — (1 file)</h1>
+    <p class="small">Mục đích: học cách tác vụ nặng ảnh hưởng tới hệ thống và cách dừng nó. <strong>Chỉ mở trên máy bạn sở hữu hoặc môi trường development</strong>.</p>
+
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <label>Thời gian chạy tối đa (giây): <input id="timeoutSec" type="number" value="5" min="1" /></label>
+      <label>Số công nhân (Web Workers): <input id="workers" type="number" value="1" min="1" max="8" /></label>
+      <label>Batch size: <input id="batch" type="number" value="200000" min="1000" step="1000" /></label>
+    </div>
+
+    <div class="controls">
+      <button id="start" class="primary">Bắt đầu</button>
+      <button id="stop">Dừng ngay</button>
+      <button id="panic">Dừng & refresh</button>
+      <button id="testSingle">Chạy 1 vòng nhẹ (test)</button>
+    </div>
+
+    <div class="status">
+      <div>Trạng thái: <strong id="state">idle</strong></div>
+      <div>Worker active: <span id="active">0</span></div>
+      <div>Thời gian chạy: <span id="elapsed">0.0</span>s</div>
+      <div>Số lần chunk xử lý (tổng): <span id="chunks">0</span></div>
+    </div>
+
+    <div class="warning">
+      CẢNH BÁO: Dù có nút dừng, tác vụ nặng vẫn có thể làm chậm máy tạm thời. Không sử dụng trên máy/website của người khác.
+    </div>
+
+    <footer>
+      Lưu ý: nếu mở bằng `file://` mà Web Worker không hoạt động, hãy chạy server cục bộ:
+      <div class="small" style="margin-top:6px">
+        - Python 3: <code>python -m http.server 8000</code><br>
+        - Node (npx): <code>npx http-server .</code>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // --- Inline worker source as string ---
+    const workerSource = `
+      let running = false;
+      let counter = 0;
+      let batch = 200000;
+
+      self.onmessage = (ev => {
+        const data = ev.data || {};
+        if (data.cmd === 'start') {
+          if (running) return;
+          running = true;
+          counter = 0;
+          if (data.batch && Number.isFinite(data.batch)) batch = data.batch;
+          function chunk(){
+            if (!running) return;
+            // CPU heavy batch
+            for (let i=0;i<batch;i++){
+              Math.pow(Math.sqrt(i + (counter % 1000)), 1.2345);
+            }
+            counter++;
+            if ((counter % 3) === 0) {
+              self.postMessage({ type: 'heartbeat', count: counter });
+            }
+            // schedule next chunk cooperatively
+            setTimeout(chunk, 0);
+          }
+          chunk();
+        } else if (data.cmd === 'stop') {
+          running = false;
+          self.postMessage({ type: 'stopped', count: counter });
+          // close worker if supported
+          try { self.close && self.close(); } catch(e) {}
+        } else if (data.cmd === 'test') {
+          // small non-blocking test
+          let s = 0;
+          for (let i=0;i<10000;i++) s += Math.sqrt(i);
+          self.postMessage({ type: 'test', result: s });
+        }
+      });
+    `;
+
+    // create a Blob worker URL
+    const blob = new Blob([workerSource], { type: 'application/javascript' });
+    const workerURL = URL.createObjectURL(blob);
+
+    let workers = [];
+    let startTime = 0;
+    let timerInterval = null;
+    let totalChunks = 0;
+
+    const startBtn = document.getElementById('start');
+    const stopBtn  = document.getElementById('stop');
+    const panicBtn = document.getElementById('panic');
+    const testBtn  = document.getElementById('testSingle');
+    const stateEl  = document.getElementById('state');
+    const activeEl = document.getElementById('active');
+    const elapsedEl= document.getElementById('elapsed');
+    const chunksEl = document.getElementById('chunks');
+
+    function setState(s){ stateEl.textContent = s; }
+
+    startBtn.addEventListener('click', () => {
+      const sec = Math.max(1, Number(document.getElementById('timeoutSec').value || 5));
+      const count = Math.min(8, Math.max(1, Number(document.getElementById('workers').value || 1)));
+      const batch = Math.max(1000, Number(document.getElementById('batch').value || 200000));
+      if (workers.length) return;
+      setState('starting');
+      startTime = performance.now();
+      totalChunks = 0;
+      chunksEl.textContent = totalChunks;
+      timerInterval = setInterval(() => {
+        const t = (performance.now() - startTime) / 1000;
+        elapsedEl.textContent = t.toFixed(1);
+        if (t >= sec) stopAll();
+      }, 100);
+
+      for (let i=0;i<count;i++){
+        const w = new Worker(workerURL);
+        w.onmessage = (ev) => {
+          const d = ev.data || {};
+          if (d.type === 'heartbeat') {
+            // reflect activity; increment total chunks approx
+            totalChunks += 1;
+            chunksEl.textContent = totalChunks;
+            activeEl.textContent = Math.max(1, totalChunks); // simple indicator
+          } else if (d.type === 'stopped') {
+            // ignore
+          } else if (d.type === 'test') {
+            console.log('worker test result', d.result);
+          }
+        };
+        workers.push(w);
+      }
+      // start work with batch param
+      workers.forEach(w => w.postMessage({ cmd: 'start', batch }));
+      setState('running');
+    });
+
+    stopBtn.addEventListener('click', stopAll);
+
+    panicBtn.addEventListener('click', () => {
+      stopAll();
+      setTimeout(()=>location.reload(), 200);
+    });
+
+    testBtn.addEventListener('click', () => {
+      // create a short-lived worker to test responsiveness
+      const w = new Worker(workerURL);
+      w.onmessage = (ev) => {
+        const d = ev.data || {};
+        if (d.type === 'test') {
+          alert('Test finished — worker returned result.');
+          w.terminate();
+        }
+      };
+      w.postMessage({ cmd: 'test' });
+    });
+
+    function stopAll(){
+      if (!workers.length) { setState('idle'); return; }
+      workers.forEach(w => {
+        try { w.postMessage({ cmd: 'stop' }); w.terminate(); } catch(e){}
+      });
+      workers = [];
+      clearInterval(timerInterval);
+      timerInterval = null;
+      activeEl.textContent = '0';
+      setState('stopped');
+    }
+
+    // cleanup on unload
+    window.addEventListener('beforeunload', stopAll);
+  </script>
+</body>
+</html>
