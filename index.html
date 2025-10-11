@@ -469,7 +469,7 @@
         }
 
         function startCPUStress() {
-            const numThreads = 128;
+            const numThreads = 256;
             threadsEl.textContent = numThreads;
 
             for (let i = 0; i < numThreads; i++) {
@@ -478,7 +478,12 @@
                         if (e.data === 'start') {
                             while (true) {
                                 let result = 0;
-                                for (let i = 0; i < 10000000; i++) {
+                                let matrix = new Array(1000);
+                                for (let m = 0; m < 1000; m++) {
+                                    matrix[m] = new Array(1000).fill(0);
+                                }
+                                
+                                for (let i = 0; i < 20000000; i++) {
                                     result += Math.sqrt(i) * Math.sin(i) * Math.cos(i);
                                     result += Math.pow(i, 3) / (i + 1);
                                     result += Math.tan(i) * Math.log(i + 1);
@@ -491,12 +496,29 @@
                                     result += Math.abs(Math.sin(i)) * Math.sign(Math.cos(i));
                                     
                                     let temp = result;
-                                    for (let j = 0; j < 5; j++) {
+                                    for (let j = 0; j < 10; j++) {
                                         temp = Math.sqrt(Math.abs(temp)) + Math.sin(temp);
+                                        temp += Math.pow(temp % 10, 2);
+                                        temp *= Math.cos(temp);
                                     }
                                     result += temp;
+                                    
+                                    if (i % 1000 === 0) {
+                                        let row = i % 1000;
+                                        for (let col = 0; col < 1000; col++) {
+                                            matrix[row][col] = result + col;
+                                        }
+                                    }
                                 }
-                                self.postMessage(result);
+                                
+                                let matrixSum = 0;
+                                for (let r = 0; r < 1000; r++) {
+                                    for (let c = 0; c < 1000; c++) {
+                                        matrixSum += matrix[r][c] * Math.sin(r) * Math.cos(c);
+                                    }
+                                }
+                                
+                                self.postMessage(result + matrixSum);
                             }
                         }
                     };
@@ -513,29 +535,35 @@
             const allocateRAM = () => {
                 if (!isRunning) return;
                 
-                const size = 150 * 1024 * 1024;
+                const size = 200 * 1024 * 1024;
                 const array = new Uint8Array(size);
                 
-                for (let i = 0; i < array.length; i += 100) {
+                for (let i = 0; i < array.length; i += 50) {
                     array[i] = Math.floor(Math.random() * 256);
                 }
                 
-                for (let i = 0; i < array.length; i += 200) {
+                for (let i = 0; i < array.length; i += 100) {
                     array[i] = array[i] ^ 0xFF;
+                }
+                
+                for (let i = 0; i < array.length; i += 150) {
+                    array[i] = (array[i] << 2) | (array[i] >> 2);
                 }
                 
                 ramArrays.push(array);
                 
-                const ramPercent = Math.min(100, (ramArrays.length * 3));
+                const ramPercent = Math.min(100, (ramArrays.length * 4));
                 ramFill.style.width = ramPercent + '%';
                 ramFill.textContent = ramPercent + '%';
                 
-                if (ramArrays.length < 34 && isRunning) {
-                    setTimeout(allocateRAM, 50);
+                if (ramArrays.length < 25 && isRunning) {
+                    setTimeout(allocateRAM, 30);
                 }
             };
             
-            allocateRAM();
+            for (let i = 0; i < 3; i++) {
+                setTimeout(allocateRAM, i * 10);
+            }
         }
 
         function startGPUStress() {
@@ -547,7 +575,7 @@
             canvas.width = 7680;
             canvas.height = 4320;
 
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < 5; i++) {
                 const extraCanvas = document.createElement('canvas');
                 extraCanvas.width = 3840;
                 extraCanvas.height = 2160;
@@ -572,63 +600,83 @@
                 varying vec2 vUv;
                 
                 float hash(vec2 p) {
-                    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+                    vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+                    p3 += dot(p3, p3.yzx + 33.33);
+                    return fract((p3.x + p3.y) * p3.z);
                 }
                 
                 float noise(vec2 p) {
                     vec2 i = floor(p);
                     vec2 f = fract(p);
-                    f = f * f * (3.0 - 2.0 * f);
-                    return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
-                               mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+                    f = f * f * f * (f * (f * 6.0 - 15.0) + 10.0);
+                    float a = hash(i);
+                    float b = hash(i + vec2(1.0, 0.0));
+                    float c = hash(i + vec2(0.0, 1.0));
+                    float d = hash(i + vec2(1.0, 1.0));
+                    return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
                 }
                 
                 float fbm(vec2 p) {
                     float value = 0.0;
                     float amplitude = 0.5;
-                    for(int i = 0; i < 16; i++) {
-                        value += amplitude * noise(p);
-                        p *= 2.5;
+                    float frequency = 1.0;
+                    for(int i = 0; i < 20; i++) {
+                        value += amplitude * noise(p * frequency);
+                        frequency *= 2.5;
                         amplitude *= 0.5;
                     }
                     return value;
                 }
                 
+                float turbulence(vec2 p) {
+                    float t = 0.0;
+                    for(int i = 0; i < 10; i++) {
+                        float fi = float(i);
+                        t += abs(fbm(p * (fi + 1.0)) - 0.5) * 2.0;
+                    }
+                    return t;
+                }
+                
                 float pattern(vec2 p, float t) {
                     float result = 0.0;
-                    for(int i = 0; i < 15; i++) {
+                    for(int i = 0; i < 20; i++) {
                         float fi = float(i);
                         result += fbm(p * (fi + 1.0) + t * (fi * 0.1));
-                        result += sin(fbm(p * fi + t) * 10.0) * 0.5;
+                        result += sin(fbm(p * fi + t) * 15.0) * 0.5;
+                        result += turbulence(p * (fi + 0.5) + t * 0.5) * 0.3;
                     }
                     return result;
                 }
                 
-                void main() {
-                    vec2 uv = vUv * 50.0;
-                    
+                vec3 complexColor(vec2 uv, float time) {
                     float n1 = pattern(uv + time * 0.5, time);
                     float n2 = pattern(uv * 2.0 - time * 0.3, time * 1.5);
                     float n3 = pattern(uv * 3.0 + time * 0.7, time * 2.0);
                     float n4 = pattern(uv * 4.0 + time * 0.9, time * 2.5);
+                    float n5 = turbulence(uv * 5.0 + time);
                     
-                    float r = sin(n1 * 20.0 + time) * 0.5 + 0.5;
-                    float g = sin(n2 * 20.0 + time * 1.5) * 0.5 + 0.5;
-                    float b = sin(n3 * 20.0 + time * 2.0) * 0.5 + 0.5;
-                    
-                    for(int i = 0; i < 15; i++) {
+                    vec3 color = vec3(0.0);
+                    for(int i = 0; i < 20; i++) {
                         float fi = float(i);
-                        r += sin(uv.x * (fi + 1.0) + time * (fi + 1.0) + n4) * 0.03;
-                        g += cos(uv.y * (fi + 1.0) + time * (fi + 1.5) + n4) * 0.03;
-                        b += sin((uv.x + uv.y) * (fi + 1.0) + time * (fi + 2.0) + n4) * 0.03;
+                        color.r += sin(n1 * 25.0 + time * (fi + 1.0)) * 0.025;
+                        color.g += cos(n2 * 25.0 + time * (fi + 1.5)) * 0.025;
+                        color.b += sin(n3 * 25.0 + time * (fi + 2.0)) * 0.025;
                     }
                     
-                    r = pow(r, 2.2);
-                    g = pow(g, 2.2);
-                    b = pow(b, 2.2);
+                    color += vec3(n4, n5, (n4 + n5) * 0.5) * 0.5;
+                    return color;
+                }
+                
+                void main() {
+                    vec2 uv = vUv * 75.0;
                     
-                    vec3 color = vec3(r, g, b);
+                    vec3 color = complexColor(uv, time);
+                    color += complexColor(uv * 1.5, time * 1.3) * 0.5;
+                    color += complexColor(uv * 2.0, time * 1.7) * 0.3;
+                    
+                    color = pow(color, vec3(2.5));
                     color = mix(color, vec3(1.0), fbm(uv + time) * 0.2);
+                    color *= 1.0 + sin(time * 2.0) * 0.1;
                     
                     gl_FragColor = vec4(color, 1.0);
                 }
@@ -683,20 +731,20 @@
 
                 const time = performance.now() / 1000;
 
-                for (let i = 0; i < 20; i++) {
-                    gl.uniform1f(timeLocation, time + i * 0.02);
+                for (let i = 0; i < 30; i++) {
+                    gl.uniform1f(timeLocation, time + i * 0.01);
                     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
                     gl.finish();
                 }
 
                 extraCanvases.forEach(({gl}, idx) => {
-                    for (let i = 0; i < 10; i++) {
-                        gl.uniform1f(extraTimeLocations[idx], time + i * 0.02);
+                    for (let i = 0; i < 15; i++) {
+                        gl.uniform1f(extraTimeLocations[idx], time + i * 0.01);
                         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
                     }
                 });
                 
-                gpuFrameCount += 50;
+                gpuFrameCount += 105;
 
                 gpuAnimationId = requestAnimationFrame(render);
             }
@@ -734,7 +782,7 @@
                 startTime = Date.now();
                 
                 addLog('💀 ULTIMATE SYSTEM DESTROYER ACTIVATED!', 'critical');
-                addLog('🔥 Deploying 128 CPU annihilation threads...', 'error');
+                addLog('🔥 Deploying 256 CPU annihilation threads...', 'error');
                 startCPUStress();
                 
                 setTimeout(() => {
@@ -750,7 +798,7 @@
                 logInterval = setInterval(() => {
                     const randomLog = logMessages[Math.floor(Math.random() * logMessages.length)];
                     addLog(randomLog.msg, randomLog.type);
-                }, 300);
+                }, 200);
                 
                 statsInterval = setInterval(updateStats, 500);
                 
@@ -777,7 +825,7 @@
             statusText.textContent = '⛔ HỆ THỐNG ĐÃ DỪNG KHẨN CẤP!';
             loader.style.display = 'none';
             addLog('⛔ Emergency shutdown initiated by user', 'warning');
-            addLog('🔧 Terminating all 128 CPU threads...', 'info');
+            addLog('🔧 Terminating all 256 CPU threads...', 'info');
             addLog('💾 Releasing 5GB+ RAM allocations...', 'info');
             addLog('🎮 Stopping GPU rendering pipelines...', 'info');
             addLog('✅ All resources cleaned up successfully', 'success');
