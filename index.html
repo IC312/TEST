@@ -321,7 +321,7 @@
         }
 
         function startCPUStress() {
-            const numThreads = navigator.hardwareConcurrency || 4;
+            const numThreads = navigator.hardwareConcurrency || 6;
             threadsEl.textContent = numThreads;
 
             for (let i = 0; i < numThreads; i++) {
