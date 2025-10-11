@@ -465,24 +465,56 @@
                 return;
             }
 
-            canvas.width = 1920;
-            canvas.height = 1080;
+            canvas.width = 3840;
+            canvas.height = 2160;
 
             const vertexShaderSource = `
                 attribute vec2 position;
+                varying vec2 vUv;
                 void main() {
+                    vUv = position * 0.5 + 0.5;
                     gl_Position = vec4(position, 0.0, 1.0);
                 }
             `;
 
             const fragmentShaderSource = `
-                precision mediump float;
+                precision highp float;
                 uniform float time;
+                varying vec2 vUv;
+                
+                float noise(vec2 p) {
+                    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+                }
+                
+                float fbm(vec2 p) {
+                    float value = 0.0;
+                    float amplitude = 0.5;
+                    for(int i = 0; i < 8; i++) {
+                        value += amplitude * noise(p);
+                        p *= 2.0;
+                        amplitude *= 0.5;
+                    }
+                    return value;
+                }
+                
                 void main() {
-                    vec2 uv = gl_FragCoord.xy / vec2(1920.0, 1080.0);
-                    float r = sin(uv.x * 10.0 + time) * 0.5 + 0.5;
-                    float g = sin(uv.y * 10.0 + time * 1.5) * 0.5 + 0.5;
-                    float b = sin((uv.x + uv.y) * 5.0 + time * 2.0) * 0.5 + 0.5;
+                    vec2 uv = vUv * 20.0;
+                    
+                    float n1 = fbm(uv + time * 0.5);
+                    float n2 = fbm(uv * 2.0 - time * 0.3);
+                    float n3 = fbm(uv * 3.0 + time * 0.7);
+                    
+                    float r = sin(n1 * 10.0 + time) * 0.5 + 0.5;
+                    float g = sin(n2 * 10.0 + time * 1.5) * 0.5 + 0.5;
+                    float b = sin(n3 * 10.0 + time * 2.0) * 0.5 + 0.5;
+                    
+                    for(int i = 0; i < 5; i++) {
+                        float fi = float(i);
+                        r += sin(uv.x * (fi + 1.0) + time * (fi + 1.0)) * 0.1;
+                        g += cos(uv.y * (fi + 1.0) + time * (fi + 1.5)) * 0.1;
+                        b += sin((uv.x + uv.y) * (fi + 1.0) + time * (fi + 2.0)) * 0.1;
+                    }
+                    
                     gl_FragColor = vec4(r, g, b, 1.0);
                 }
             `;
@@ -535,10 +567,13 @@
             function render() {
                 if (!isRunning) return;
 
-                gl.uniform1f(timeLocation, performance.now() / 1000);
-                gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+                for (let i = 0; i < 5; i++) {
+                    gl.uniform1f(timeLocation, performance.now() / 1000 + i * 0.1);
+                    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+                    gl.finish();
+                }
                 
-                gpuFrameCount++;
+                gpuFrameCount += 5;
 
                 gpuAnimationId = requestAnimationFrame(render);
             }
