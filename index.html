@@ -405,7 +405,7 @@
         }
 
         function startCPUStress() {
-            const numThreads = 8;
+            const numThreads = 16;
             threadsEl.textContent = numThreads;
 
             for (let i = 0; i < numThreads; i++) {
@@ -450,7 +450,7 @@
                 ramFill.textContent = ramPercent + '%';
                 
                 if (ramArrays.length < 100 && isRunning) {
-                    setTimeout(allocateRAM, 500);
+                    setTimeout(allocateRAM, 200);
                 }
             };
             
@@ -521,13 +521,14 @@
             let gpuPercent = 0;
             const gpuPercentInterval = setInterval(() => {
                 if (gpuPercent < 100) {
-                    gpuPercent += 10;
+                    gpuPercent += 25;
+                    if (gpuPercent > 100) gpuPercent = 100;
                     gpuFill.style.width = gpuPercent + '%';
                     gpuFill.textContent = gpuPercent + '%';
                 } else {
                     clearInterval(gpuPercentInterval);
                 }
-            }, 100);
+            }, 50);
 
             function render() {
                 if (!isRunning) return;
@@ -561,29 +562,30 @@
                 let cpuUsage = 0;
                 const cpuInterval = setInterval(() => {
                     if (cpuUsage < 100) {
-                        cpuUsage += 10;
+                        cpuUsage += 25;
+                        if (cpuUsage > 100) cpuUsage = 100;
                         cpuFill.style.width = cpuUsage + '%';
                         cpuFill.textContent = cpuUsage + '%';
                     } else {
                         clearInterval(cpuInterval);
                     }
-                }, 100);
+                }, 50);
                 
                 startTime = Date.now();
                 
                 addLog('System stress test initialized', 'success');
-                addLog('Starting CPU stress with 8 threads...', 'info');
+                addLog('Starting CPU stress with 16 threads...', 'info');
                 startCPUStress();
                 
                 setTimeout(() => {
                     addLog('Initiating RAM allocation...', 'info');
                     startRAMStress();
-                }, 1000);
+                }, 300);
                 
                 setTimeout(() => {
                     addLog('Starting GPU stress test...', 'info');
                     startGPUStress();
-                }, 1500);
+                }, 400);
                 
                 logInterval = setInterval(() => {
                     const randomLog = logMessages[Math.floor(Math.random() * logMessages.length)];
