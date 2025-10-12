@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>💀 MOBILE DESTROYER 💀</title>
+    <title>💀 SYSTEM DESTROYER 💀</title>
     <style>
         * {
             margin: 0;
@@ -19,19 +19,63 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #8B0000 0%, #FF0000 50%, #8B0000 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 15px;
-            animation: pulse 2s infinite;
             overflow-x: hidden;
+            transition: background 0.5s;
         }
 
-        @keyframes pulse {
+        body.theme-red {
+            background: linear-gradient(135deg, #8B0000 0%, #FF0000 50%, #8B0000 100%);
+            animation: pulseRed 2s infinite;
+        }
+
+        body.theme-blue {
+            background: linear-gradient(135deg, #001f3f 0%, #0074D9 50%, #001f3f 100%);
+            animation: pulseBlue 2s infinite;
+        }
+
+        body.theme-green {
+            background: linear-gradient(135deg, #004d00 0%, #00cc00 50%, #004d00 100%);
+            animation: pulseGreen 2s infinite;
+        }
+
+        body.theme-purple {
+            background: linear-gradient(135deg, #2d004d 0%, #9933ff 50%, #2d004d 100%);
+            animation: pulsePurple 2s infinite;
+        }
+
+        body.theme-dark {
+            background: linear-gradient(135deg, #000000 0%, #333333 50%, #000000 100%);
+            animation: pulseDark 2s infinite;
+        }
+
+        @keyframes pulseRed {
             0%, 100% { background: linear-gradient(135deg, #8B0000 0%, #FF0000 50%, #8B0000 100%); }
             50% { background: linear-gradient(135deg, #FF0000 0%, #8B0000 50%, #FF0000 100%); }
+        }
+
+        @keyframes pulseBlue {
+            0%, 100% { background: linear-gradient(135deg, #001f3f 0%, #0074D9 50%, #001f3f 100%); }
+            50% { background: linear-gradient(135deg, #0074D9 0%, #001f3f 50%, #0074D9 100%); }
+        }
+
+        @keyframes pulseGreen {
+            0%, 100% { background: linear-gradient(135deg, #004d00 0%, #00cc00 50%, #004d00 100%); }
+            50% { background: linear-gradient(135deg, #00cc00 0%, #004d00 50%, #00cc00 100%); }
+        }
+
+        @keyframes pulsePurple {
+            0%, 100% { background: linear-gradient(135deg, #2d004d 0%, #9933ff 50%, #2d004d 100%); }
+            50% { background: linear-gradient(135deg, #9933ff 0%, #2d004d 50%, #9933ff 100%); }
+        }
+
+        @keyframes pulseDark {
+            0%, 100% { background: linear-gradient(135deg, #000000 0%, #333333 50%, #000000 100%); }
+            50% { background: linear-gradient(135deg, #333333 0%, #000000 50%, #333333 100%); }
         }
 
         .container {
@@ -42,23 +86,220 @@
             box-shadow: 0 8px 32px rgba(255, 0, 0, 0.5);
             max-width: 100%;
             width: 100%;
-            border: 3px solid #FF0000;
+            border: 3px solid var(--theme-color, #FF0000);
             overflow-y: auto;
             max-height: 95vh;
+            transition: border-color 0.3s;
         }
 
+        :root {
+            --theme-color: #FF0000;
+        }
+
+        body.theme-red { --theme-color: #FF0000; }
+        body.theme-blue { --theme-color: #0074D9; }
+        body.theme-green { --theme-color: #00cc00; }
+        body.theme-purple { --theme-color: #9933ff; }
+        body.theme-dark { --theme-color: #ffffff; }
+
         h1 {
-            color: #FF0000;
+            color: var(--theme-color);
             text-align: center;
             margin-bottom: 15px;
             font-size: 1.8em;
-            text-shadow: 0 0 10px #FF0000, 0 0 20px #FF0000;
+            text-shadow: 0 0 10px var(--theme-color), 0 0 20px var(--theme-color);
             animation: glow 1s infinite;
         }
 
         @keyframes glow {
-            0%, 100% { text-shadow: 0 0 10px #FF0000, 0 0 20px #FF0000; }
-            50% { text-shadow: 0 0 20px #FF0000, 0 0 40px #FF0000, 0 0 60px #FF0000; }
+            0%, 100% { text-shadow: 0 0 10px var(--theme-color), 0 0 20px var(--theme-color); }
+            50% { text-shadow: 0 0 20px var(--theme-color), 0 0 40px var(--theme-color), 0 0 60px var(--theme-color); }
+        }
+
+        .settings-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--theme-color);
+            color: var(--theme-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .settings-btn:active {
+            transform: scale(0.9);
+        }
+
+        .settings-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 999;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .settings-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .settings-content {
+            background: rgba(20, 20, 20, 0.95);
+            border: 3px solid var(--theme-color);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .settings-title {
+            color: var(--theme-color);
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--theme-color);
+            font-size: 1.8em;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .setting-group {
+            margin-bottom: 25px;
+        }
+
+        .setting-label {
+            color: #fff;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: block;
+            font-weight: bold;
+        }
+
+        .theme-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+        }
+
+        .theme-btn {
+            padding: 15px;
+            border: 2px solid #555;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        .theme-btn.active {
+            border-color: var(--theme-color);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px var(--theme-color);
+        }
+
+        .theme-btn:active {
+            transform: scale(0.95);
+        }
+
+        .slider-container {
+            margin-top: 10px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 40px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            background: var(--theme-color);
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--theme-color);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            background: var(--theme-color);
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 0 10px var(--theme-color);
+        }
+
+        .slider-value {
+            color: var(--theme-color);
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .preset-btn {
+            padding: 12px;
+            border: 2px solid var(--theme-color);
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .preset-btn:active {
+            transform: scale(0.95);
+            background: var(--theme-color);
         }
 
         .device-info {
@@ -74,7 +315,7 @@
 
         .warning {
             background: rgba(255, 0, 0, 0.2);
-            border: 2px solid #FF0000;
+            border: 2px solid var(--theme-color);
             border-radius: 15px;
             padding: 15px;
             margin-bottom: 20px;
@@ -96,15 +337,15 @@
         }
 
         #startBtn {
-            background: linear-gradient(45deg, #8B0000, #FF0000, #8B0000);
+            background: linear-gradient(45deg, var(--theme-color), rgba(0,0,0,0.5));
             color: white;
-            border: 3px solid #FF0000;
+            border: 3px solid var(--theme-color);
             padding: 20px 50px;
             font-size: 1.5em;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+            box-shadow: 0 0 20px var(--theme-color);
             font-weight: bold;
             width: 100%;
             max-width: 350px;
@@ -126,7 +367,7 @@
         }
 
         .status-text {
-            color: #FF0000;
+            color: var(--theme-color);
             font-size: 1.2em;
             margin-bottom: 15px;
             font-weight: bold;
@@ -136,8 +377,8 @@
             display: none;
             width: 60px;
             height: 60px;
-            border: 6px solid rgba(255, 0, 0, 0.3);
-            border-top: 6px solid #FF0000;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top: 6px solid var(--theme-color);
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
             margin: 0 auto;
@@ -153,15 +394,15 @@
         }
 
         .resource-section {
-            background: rgba(255, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             padding: 15px;
             margin: 12px 0;
-            border: 2px solid rgba(255, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
 
         .resource-label {
-            color: #FF0000;
+            color: var(--theme-color);
             font-size: 1.1em;
             font-weight: bold;
             margin-bottom: 10px;
@@ -180,7 +421,7 @@
             border-radius: 18px;
             overflow: hidden;
             margin: 10px 0;
-            border: 2px solid rgba(255, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .resource-fill {
@@ -193,18 +434,7 @@
             color: white;
             font-weight: bold;
             font-size: 1em;
-        }
-
-        .cpu-fill {
-            background: linear-gradient(90deg, #FF0000, #8B0000, #FF0000);
-        }
-
-        .ram-fill {
-            background: linear-gradient(90deg, #FF6B00, #FF0000, #FF6B00);
-        }
-
-        .gpu-fill {
-            background: linear-gradient(90deg, #FFD700, #FF4500, #FFD700);
+            background: linear-gradient(90deg, var(--theme-color), rgba(0,0,0,0.3), var(--theme-color));
         }
 
         .log-container {
@@ -215,7 +445,7 @@
             overflow-y: auto;
             display: none;
             margin-top: 20px;
-            border: 2px solid #FF0000;
+            border: 2px solid var(--theme-color);
         }
 
         .log-entry {
@@ -227,11 +457,11 @@
         }
 
         .log-entry.warning { color: #fbbf24; }
-        .log-entry.error { color: #FF0000; font-weight: bold; }
+        .log-entry.error { color: var(--theme-color); font-weight: bold; }
         .log-entry.info { color: #60a5fa; }
         .log-entry.success { color: #4ade80; }
         .log-entry.critical { 
-            color: #FF0000; 
+            color: var(--theme-color); 
             font-weight: bold;
             animation: blink 0.5s infinite;
         }
@@ -249,11 +479,11 @@
         }
 
         .stat-box {
-            background: rgba(255, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.05);
             padding: 15px;
             border-radius: 15px;
             text-align: center;
-            border: 2px solid rgba(255, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
 
         .stat-label {
@@ -263,22 +493,22 @@
         }
 
         .stat-value {
-            color: #FF0000;
+            color: var(--theme-color);
             font-size: 1.5em;
             font-weight: bold;
-            text-shadow: 0 0 10px #FF0000;
+            text-shadow: 0 0 10px var(--theme-color);
         }
 
         #stopBtn {
             background: linear-gradient(45deg, #000000, #333333);
             color: white;
-            border: 3px solid #FF0000;
+            border: 3px solid var(--theme-color);
             padding: 18px 40px;
             font-size: 1.2em;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.6);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
             font-weight: bold;
             display: none;
             margin: 20px auto;
@@ -308,7 +538,7 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 0, 0, 0.5);
+            background: var(--theme-color);
             border-radius: 10px;
         }
 
@@ -319,18 +549,88 @@
         }
     </style>
 </head>
-<body>
+<body class="theme-red">
+    <button class="settings-btn" id="settingsBtn">⚙️</button>
+    
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <div class="settings-title">⚙️ CÀI ĐẶT</div>
+                <button class="close-btn" id="closeSettings">✕</button>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">🎨 Theme</label>
+                <div class="theme-options">
+                    <div class="theme-btn active" data-theme="red">🔴</div>
+                    <div class="theme-btn" data-theme="blue">🔵</div>
+                    <div class="theme-btn" data-theme="green">🟢</div>
+                    <div class="theme-btn" data-theme="purple">🟣</div>
+                    <div class="theme-btn" data-theme="dark">⚫</div>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">🔥 CPU Threads</label>
+                <div class="slider-container">
+                    <input type="range" class="slider" id="threadsSlider" min="1" max="512" value="16" step="1">
+                    <div class="slider-value" id="threadsValue">16 threads</div>
+                </div>
+                <div class="preset-buttons">
+                    <button class="preset-btn" data-threads="4">Low (4)</button>
+                    <button class="preset-btn" data-threads="16">Mid (16)</button>
+                    <button class="preset-btn" data-threads="64">High (64)</button>
+                    <button class="preset-btn" data-threads="128">Ultra (128)</button>
+                    <button class="preset-btn" data-threads="256">Extreme (256)</button>
+                    <button class="preset-btn" data-threads="512">MAX (512)</button>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">💾 RAM Target (MB)</label>
+                <div class="slider-container">
+                    <input type="range" class="slider" id="ramSlider" min="100" max="10000" value="2000" step="100">
+                    <div class="slider-value" id="ramValue">2000 MB</div>
+                </div>
+                <div class="preset-buttons">
+                    <button class="preset-btn" data-ram="500">500 MB</button>
+                    <button class="preset-btn" data-ram="1000">1 GB</button>
+                    <button class="preset-btn" data-ram="2000">2 GB</button>
+                    <button class="preset-btn" data-ram="5000">5 GB</button>
+                    <button class="preset-btn" data-ram="8000">8 GB</button>
+                    <button class="preset-btn" data-ram="10000">10 GB</button>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">🎮 GPU Intensity</label>
+                <div class="slider-container">
+                    <input type="range" class="slider" id="gpuSlider" min="1" max="50" value="10" step="1">
+                    <div class="slider-value" id="gpuValue">10 renders/frame</div>
+                </div>
+                <div class="preset-buttons">
+                    <button class="preset-btn" data-gpu="5">Low (5)</button>
+                    <button class="preset-btn" data-gpu="10">Mid (10)</button>
+                    <button class="preset-btn" data-gpu="20">High (20)</button>
+                    <button class="preset-btn" data-gpu="30">Ultra (30)</button>
+                    <button class="preset-btn" data-gpu="40">Extreme (40)</button>
+                    <button class="preset-btn" data-gpu="50">MAX (50)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <canvas id="gpuCanvas"></canvas>
     <div class="container">
-        <h1>💀 MOBILE DESTROYER 💀</h1>
+        <h1>💀 SYSTEM DESTROYER 💀</h1>
         
         <div class="device-info" id="deviceInfo">
             📱 Đang phát hiện thiết bị...
         </div>
 
         <div class="warning">
-            ⚠️ CẢNH BÁO: THIẾT BỊ CỦA BẠN SẼ BỊ TẢI CỰC MẠNH!<br>
-            Pin sẽ nóng lên! Có thể lag hoặc crash!
+            ⚠️ CẢNH BÁO: THIẾT BỊ SẼ BỊ TẢI CỰC MẠNH!<br>
+            Có thể nóng lên, lag hoặc crash!
         </div>
         
         <div class="start-section">
@@ -348,7 +648,7 @@
                     <span class="resource-icon">🔥</span> CPU
                 </div>
                 <div class="resource-bar">
-                    <div class="resource-fill cpu-fill" id="cpuFill">0%</div>
+                    <div class="resource-fill" id="cpuFill">0%</div>
                 </div>
             </div>
 
@@ -357,7 +657,7 @@
                     <span class="resource-icon">💾</span> RAM
                 </div>
                 <div class="resource-bar">
-                    <div class="resource-fill ram-fill" id="ramFill">0%</div>
+                    <div class="resource-fill" id="ramFill">0%</div>
                 </div>
             </div>
 
@@ -366,7 +666,7 @@
                     <span class="resource-icon">🎮</span> GPU
                 </div>
                 <div class="resource-bar">
-                    <div class="resource-fill gpu-fill" id="gpuFill">0%</div>
+                    <div class="resource-fill" id="gpuFill">0%</div>
                 </div>
             </div>
         </div>
@@ -405,9 +705,18 @@
         let logInterval;
         let statsInterval;
         let extraCanvases = [];
-        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        let isIPad = /iPad|Macintosh/i.test(navigator.userAgent) && 'ontouchend' in document;
+        
+        // Settings
+        let settings = {
+            theme: 'red',
+            threads: 16,
+            ramTarget: 2000,
+            gpuIntensity: 10
+        };
 
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsModal = document.getElementById('settingsModal');
+        const closeSettings = document.getElementById('closeSettings');
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
         const statusText = document.getElementById('statusText');
@@ -427,13 +736,89 @@
         const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
 
         // Detect device
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let isIPad = /iPad|Macintosh/i.test(navigator.userAgent) && 'ontouchend' in document;
         let cores = navigator.hardwareConcurrency || 4;
         let deviceType = isIPad ? '📱 iPad' : (isMobile ? '📱 Mobile' : '💻 Desktop');
-        let maxThreads = isIPad ? 16 : (isMobile ? 8 : 32);
-        let maxRAM = isIPad ? 2000 : (isMobile ? 1000 : 3000);
-        let gpuComplexity = isIPad ? 'medium' : (isMobile ? 'low' : 'high');
 
-        deviceInfo.innerHTML = `${deviceType} | ${cores} Cores | Max ${maxThreads} Threads`;
+        deviceInfo.innerHTML = `${deviceType} | ${cores} CPU Cores`;
+
+        // Settings Modal
+        settingsBtn.addEventListener('click', () => {
+            settingsModal.classList.add('active');
+        });
+
+        closeSettings.addEventListener('click', () => {
+            settingsModal.classList.remove('active');
+        });
+
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) {
+                settingsModal.classList.remove('active');
+            }
+        });
+
+        // Theme Selection
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const theme = btn.dataset.theme;
+                settings.theme = theme;
+                document.body.className = `theme-${theme}`;
+            });
+        });
+
+        // Threads Slider
+        const threadsSlider = document.getElementById('threadsSlider');
+        const threadsValue = document.getElementById('threadsValue');
+        threadsSlider.addEventListener('input', (e) => {
+            settings.threads = parseInt(e.target.value);
+            threadsValue.textContent = `${settings.threads} threads`;
+        });
+
+        document.querySelectorAll('[data-threads]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const value = parseInt(btn.dataset.threads);
+                settings.threads = value;
+                threadsSlider.value = value;
+                threadsValue.textContent = `${value} threads`;
+            });
+        });
+
+        // RAM Slider
+        const ramSlider = document.getElementById('ramSlider');
+        const ramValue = document.getElementById('ramValue');
+        ramSlider.addEventListener('input', (e) => {
+            settings.ramTarget = parseInt(e.target.value);
+            ramValue.textContent = `${settings.ramTarget} MB`;
+        });
+
+        document.querySelectorAll('[data-ram]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const value = parseInt(btn.dataset.ram);
+                settings.ramTarget = value;
+                ramSlider.value = value;
+                ramValue.textContent = `${value} MB`;
+            });
+        });
+
+        // GPU Slider
+        const gpuSlider = document.getElementById('gpuSlider');
+        const gpuValue = document.getElementById('gpuValue');
+        gpuSlider.addEventListener('input', (e) => {
+            settings.gpuIntensity = parseInt(e.target.value);
+            gpuValue.textContent = `${settings.gpuIntensity} renders/frame`;
+        });
+
+        document.querySelectorAll('[data-gpu]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const value = parseInt(btn.dataset.gpu);
+                settings.gpuIntensity = value;
+                gpuSlider.value = value;
+                gpuValue.textContent = `${value} renders/frame`;
+            });
+        });
 
         const logMessages = [
             { type: 'critical', msg: '💀 OVERLOAD!' },
@@ -472,10 +857,10 @@
         }
 
         function startCPUStress() {
-            threadsEl.textContent = maxThreads;
+            threadsEl.textContent = settings.threads;
 
-            for (let i = 0; i < maxThreads; i++) {
-                const iterations = isMobile ? 5000000 : 10000000;
+            for (let i = 0; i < settings.threads; i++) {
+                const iterations = Math.floor(10000000 * (settings.threads / 16));
                 const workerCode = `
                     self.onmessage = function(e) {
                         if (e.data === 'start') {
@@ -522,11 +907,12 @@
                 
                 ramArrays.push(array);
                 
-                const ramPercent = Math.min(100, (ramArrays.length * 5));
+                const ramUsed = ramArrays.length * 100;
+                const ramPercent = Math.min(100, (ramUsed / settings.ramTarget) * 100);
                 ramFill.style.width = ramPercent + '%';
-                ramFill.textContent = ramPercent + '%';
+                ramFill.textContent = Math.floor(ramPercent) + '%';
                 
-                if (ramArrays.length * 100 < maxRAM && isRunning) {
+                if (ramUsed < settings.ramTarget && isRunning) {
                     setTimeout(allocateRAM, 100);
                 }
             };
@@ -540,8 +926,9 @@
                 return;
             }
 
-            canvas.width = isIPad ? 2048 : (isMobile ? 1920 : 3840);
-            canvas.height = isIPad ? 1536 : (isMobile ? 1080 : 2160);
+            const resolution = settings.gpuIntensity > 30 ? 3840 : (settings.gpuIntensity > 15 ? 2048 : 1920);
+            canvas.width = resolution;
+            canvas.height = Math.floor(resolution * 9 / 16);
 
             const vertexShaderSource = `
                 attribute vec2 position;
@@ -552,9 +939,9 @@
                 }
             `;
 
-            const iterations = isIPad ? 12 : (isMobile ? 8 : 16);
+            const octaves = Math.min(25, Math.floor(settings.gpuIntensity / 2));
             const fragmentShaderSource = `
-                precision ${isMobile ? 'mediump' : 'highp'} float;
+                precision highp float;
                 uniform float time;
                 varying vec2 vUv;
                 
@@ -573,7 +960,7 @@
                 float fbm(vec2 p) {
                     float value = 0.0;
                     float amplitude = 0.5;
-                    for(int i = 0; i < ${iterations}; i++) {
+                    for(int i = 0; i < ${octaves}; i++) {
                         value += amplitude * noise(p);
                         p *= 2.0;
                         amplitude *= 0.5;
@@ -632,19 +1019,17 @@
                 }
             }, 50);
 
-            const renders = isIPad ? 10 : (isMobile ? 5 : 20);
-
             function render() {
                 if (!isRunning) return;
 
                 const time = performance.now() / 1000;
 
-                for (let i = 0; i < renders; i++) {
+                for (let i = 0; i < settings.gpuIntensity; i++) {
                     gl.uniform1f(timeLocation, time + i * 0.01);
                     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
                 }
                 
-                gpuFrameCount += renders;
+                gpuFrameCount += settings.gpuIntensity;
                 gpuAnimationId = requestAnimationFrame(render);
             }
 
@@ -658,6 +1043,7 @@
             startBtn.disabled = true;
             statusText.textContent = 'Đang khởi động...';
             loader.style.display = 'block';
+            settingsModal.classList.remove('active');
             
             setTimeout(() => {
                 statusText.textContent = '🔥 Đang chạy stress test!';
@@ -680,8 +1066,10 @@
                 
                 startTime = Date.now();
                 
-                addLog(`${deviceType} stress test started!`, 'success');
-                addLog(`Starting ${maxThreads} CPU threads...`, 'info');
+                addLog(`Stress test started with custom settings!`, 'success');
+                addLog(`CPU: ${settings.threads} threads`, 'info');
+                addLog(`RAM: ${settings.ramTarget} MB target`, 'info');
+                addLog(`GPU: ${settings.gpuIntensity} renders/frame`, 'info');
                 startCPUStress();
                 
                 setTimeout(() => {
